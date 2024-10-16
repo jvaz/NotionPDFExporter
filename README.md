@@ -34,7 +34,7 @@ NotionPDFExporter is a Google Apps Script project that allows you to export Noti
 
 ## Usage
 
-1. After setting up the script, click on the "Run" button in the Google Apps Script editor to execute the `exportNotionToPDF` function.
+1. After setting up the script and script properties, click on the "Run" button in the Google Apps Script editor to execute the `exportNotionToPDF` function.
 2. The script will fetch the content from Notion, convert it to HTML, generate a PDF, and save it to the specified Google Drive folder.
 3. Check the execution log for any error messages or the final "PDF saved successfully" message with the file ID.
 4. The exported PDF will be named `Notion_Export_YYYYMMDD.pdf`, where YYYYMMDD is the current date.
@@ -51,9 +51,24 @@ NotionPDFExporter is a Google Apps Script project that allows you to export Noti
 If you encounter any issues:
 1. Check the execution log in the Google Apps Script editor for error messages.
 2. Ensure your Notion API token has the necessary permissions.
-3. Verify that the Notion page ID and Google Drive folder ID are correct.
+3. Verify that the Notion page ID and Google Drive folder ID are correct in the script properties.
 4. If specific block types are not rendering correctly, you may need to modify the `convertBlockToHTML` function to handle them appropriately.
 5. For issues with images, check if they are properly linked or if they're using base64 encoding.
+
+## Local Development
+
+If you're developing locally using clasp:
+
+1. Create a `config.json` file in your project root with the following structure:
+   ```json
+   {
+     "NOTION_API_TOKEN": "your_notion_api_token",
+     "ROOT_PAGE_ID": "your_root_page_id",
+     "DRIVE_FOLDER_ID": "your_drive_folder_id"
+   }
+   ```
+2. Make sure to add `config.json` to your `.gitignore` file to prevent committing sensitive information.
+3. Modify the `Code.gs` file to load these values from the config file instead of using `PropertiesService` when running locally.
 
 ## Contributing
 
