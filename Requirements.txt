@@ -1,0 +1,112 @@
+### Requirements Specification for a Single Prompt to Generate Code
+
+To create a prompt that will allow a large language model (LLM) to build the code that exports a Notion page and all its subpages as a PDF file in Google Drive, we need to specify the exact requirements, including all the necessary components, expected behavior, and handling of different block types from the Notion API.
+
+Here's a structured specification that outlines what the LLM needs to know and do in one prompt:
+
+---
+
+#### **Project Objective**
+Create a Google Apps Script that connects to the Notion API, fetches a specific page and all of its subpages, formats the content into HTML, and generates a PDF file that is saved to a designated folder in Google Drive.
+
+#### **Requirements**
+1. **Integration with Notion API**:
+    - Authenticate using a Notion API token.
+    - Fetch content for a specific page and all of its subpages.
+    - The root page ID and the API token must be configurable in the script.
+    - Use Notion's API to retrieve all child blocks (including nested blocks) of the page.
+
+2. **Recursive Subpage Handling**:
+    - If a block is a `child_page` or a `link_to_page`, recursively fetch and process its content.
+    - Ensure that all subpages, regardless of depth, are included in the final output.
+
+3. **Block Type Handling**:
+    The script must support formatting for all block types listed in the [Notion API documentation](https://developers.notion.com/reference/block#block-type-objects). Here are the key block types to handle:
+    - **Text-based Blocks**:
+      - `paragraph`, `heading_1`, `heading_2`, `heading_3`
+    - **Lists**:
+      - `bulleted_list_item`, `numbered_list_item`, `to_do`
+    - **Rich Content**:
+      - `quote`, `code`, `callout`, `toggle`
+    - **Media**:
+      - `image`, `video`, `file`, `audio`, `pdf`
+    - **Tables**:
+      - `table`, `table_row`
+    - **Layout Blocks**:
+      - `column`, `column_list`
+    - **Linking Blocks**:
+      - `child_page`, `link_to_page`
+    - **Miscellaneous**:
+      - `divider`, `table_of_contents`, `equation`, `breadcrumb`
+
+4. **Error Handling and Unsupported Blocks**:
+    - Gracefully handle unsupported block types by displaying a placeholder message like `[Unsupported block type: {block_type}]`.
+    - Ensure that null checks are implemented before accessing properties to avoid runtime errors such as "Cannot read properties of undefined."
+
+5. **Formatting to HTML**:
+    - Convert the content of the Notion blocks into well-structured HTML that can be rendered as a PDF.
+    - Maintain the structure of headings, paragraphs, lists, images, etc.
+    - Use appropriate HTML tags (`<h1>`, `<p>`, `<ul>`, `<ol>`, `<li>`, `<blockquote>`, `<img>`, etc.) to format the output.
+    - Ensure media (such as images and videos) are either displayed inline (for images) or linked (for files, videos, and PDFs).
+
+6. **PDF Generation**:
+    - Convert the formatted HTML into a PDF.
+    - Use the Google Apps Script’s `Utilities.newBlob` to convert HTML to PDF.
+    - Save the generated PDF file in a specific Google Drive folder. The folder ID should be configurable in the script.
+
+7. **Save PDF to Google Drive**:
+    - The generated PDF file must be saved to a designated folder in Google Drive.
+    - The filename should be configurable or based on the Notion page title.
+    - Ensure that file overwrites are handled correctly (either overwrite or create a new version).
+
+8. **Logging and Debugging**:
+    - Include detailed logging, especially when unsupported block types are encountered or when there’s an error in retrieving page content.
+    - Log the structure of each block from Notion to assist with debugging unknown or complex block types.
+
+9. **Configurable Parameters**:
+    - **Notion API Token**: This must be a configurable variable at the top of the script.
+    - **Page ID**: The root page ID to be exported, including subpages, must also be configurable.
+    - **Google Drive Folder ID**: The ID of the Google Drive folder where the PDF will be saved should be configurable.
+
+#### **Expected Script Behavior**
+
+1. **Initialization**:
+    - Fetch the content of a Notion page and recursively gather all subpages.
+    - Log errors or warnings for any unsupported or missing blocks.
+
+2. **Content Conversion**:
+    - Convert the Notion blocks into HTML while maintaining the structure and hierarchy of the original Notion page.
+
+3. **PDF Generation**:
+    - Generate a PDF file from the HTML content.
+    - Save the PDF file in a Google Drive folder specified by the folder ID.
+
+4. **Logging and Error Handling**:
+    - Log block structures and errors encountered during API calls.
+    - Gracefully handle unsupported block types with clear placeholders.
+
+---
+
+### Prompt for LLM:
+
+```
+Build a Google Apps Script that connects to the Notion API, fetches the content of a specific Notion page (and all its subpages), formats the content into HTML, and generates a PDF that is saved to a designated folder in Google Drive. Here are the requirements:
+
+1. **Integration**: Use a Notion API token and page ID to fetch content from Notion. The token and page ID should be configurable in the script.
+2. **Recursive Handling**: If a block is a `child_page` or a `link_to_page`, recursively fetch its content and process it. Ensure all subpages, regardless of depth, are included.
+3. **Supported Block Types**: 
+   - **Text Blocks**: `paragraph`, `heading_1`, `heading_2`, `heading_3`
+   - **Lists**: `bulleted_list_item`, `numbered_list_item`, `to_do`
+   - **Rich Content**: `quote`, `code`, `callout`, `toggle`
+   - **Media**: `image`, `video`, `file`, `audio`, `pdf`
+   - **Tables**: `table`, `table_row`
+   - **Layout Blocks**: `column`, `column_list`
+   - **Linking Blocks**: `child_page`, `link_to_page`
+   - **Miscellaneous**: `divider`, `table_of_contents`, `equation`, `breadcrumb`
+4. **HTML Formatting**: Convert the block content into HTML using appropriate tags (e.g., `<p>`, `<ul>`, `<ol>`, `<blockquote>`, `<img>`, `<code>`, etc.). Use `<h1>`, `<h2>`, `<h3>` for headings. Embed images and media where applicable.
+5. **PDF Generation**: Convert the HTML content into a PDF and save it in a specific Google Drive folder. The folder ID should be configurable. Use `Utilities.newBlob` to convert HTML to PDF.
+6. **Error Handling**: Log any unsupported block types and ensure graceful error handling with placeholders like `[Unsupported block type: {block_type}]`.
+7. **Configurable Variables**: Include variables for the Notion API token, root page ID, and Google Drive folder ID.
+8. **Logging**: Add detailed logging for block structures and API calls to assist with debugging.
+
+Make sure the script fetches the Notion page and all subpages, generates the correct HTML structure, and successfully saves the PDF in Google Drive.
