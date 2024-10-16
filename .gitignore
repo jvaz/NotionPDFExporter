@@ -1,0 +1,6 @@
+# Ignore any local configuration files
+config.json
+.env
+
+# Ignore Google Apps Script local development files
+.clasp.json

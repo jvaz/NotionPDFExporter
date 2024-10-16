@@ -25,10 +25,12 @@ NotionPDFExporter is a Google Apps Script project that allows you to export Noti
 
 1. Go to [Google Apps Script](https://script.google.com/) and create a new project.
 2. Copy the entire content of the `Code.gs` file into the script editor.
-3. Replace the placeholder values in the configurable variables section at the top of the script:
+3. In the Google Apps Script editor, go to Project Settings (click the gear icon).
+4. Under "Script Properties", click on "Add script property" and add the following properties:
    - `NOTION_API_TOKEN`: Your Notion API token
    - `ROOT_PAGE_ID`: The ID of the Notion page you want to export
    - `DRIVE_FOLDER_ID`: The ID of the Google Drive folder where the PDF will be saved
+5. Click "Save script properties" to save your changes.
 
 ## Usage
 

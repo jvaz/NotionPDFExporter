@@ -1,7 +1,7 @@
 // Configurable variables
-const NOTION_API_TOKEN = 'secret_wN3aoEjiyyvqK88mm5KSP4IU05YOLzKvGljJUAgs8oJ';
-const ROOT_PAGE_ID = '10e45db3-314c-80cc-a301-e0db9643fee7';
-const DRIVE_FOLDER_ID = '1jM4PAt079lHH6OCuQHvYByekkrG8YNf5';
+const NOTION_API_TOKEN = PropertiesService.getScriptProperties().getProperty('NOTION_API_TOKEN');
+const ROOT_PAGE_ID = PropertiesService.getScriptProperties().getProperty('ROOT_PAGE_ID');
+const DRIVE_FOLDER_ID = PropertiesService.getScriptProperties().getProperty('DRIVE_FOLDER_ID');
 
 function exportNotionToPDF() {
   const notionContent = fetchNotionContent(ROOT_PAGE_ID);
